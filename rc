@@ -1,0 +1,11 @@
+
+
+#Alias
+alias mamba=micromamba
+alias conda=micromamba
+alias move='function _mv(){ rsync -avzh --remove-source-files --progress "$1" "$2" && find "$1" -type d -empty -delete; }; _mv'
+alias copy="rsync -avzh --progress"
+alias ls='exa --icons -F -H --group-directories-first --git -1'
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
