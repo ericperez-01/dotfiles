@@ -6,6 +6,7 @@ if vim.g.neovide then
   vim.g.neovide_refresh_rate = 60 vim.opt.guifont = "FiraCode Nerd Font:h13"
   vim.g.neovide_transparency = 0.95
   vim.keymap.set("t", "<D-v>", [[<C-\><C-n>"+pi]], { noremap = true })
+  vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
 end
 vim.g.mapleader = " "
 local lp = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -74,8 +75,29 @@ require("lazy").setup({
     end},
 })
 vim.keymap.set("n", "<leader>w", ":w<CR>") vim.keymap.set("n", "<leader>q", ":q<CR>")
-vim.keymap.set("n", "<C-h>", "<C-w>h") vim.keymap.set("n", "<C-j>", "<C-w>j")
-vim.keymap.set("n", "<C-k>", "<C-w>k") vim.keymap.set("n", "<C-l>", "<C-w>l")
 vim.opt.showmode = false vim.opt.laststatus = 3
 vim.opt.ignorecase = true vim.opt.smartcase = true vim.opt.hlsearch = true
 vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", {silent = true})
+
+-- Smart window navigation with Alt/Option keys (like tmux)
+vim.keymap.set("n", "<M-h>", function() 
+  if vim.fn.winnr() == vim.fn.winnr('h') then vim.cmd('tabprevious') else vim.cmd('wincmd h') end
+end, {silent = true})
+vim.keymap.set("n", "<M-l>", function() 
+  if vim.fn.winnr() == vim.fn.winnr('l') then vim.cmd('tabnext') else vim.cmd('wincmd l') end
+end, {silent = true})
+vim.keymap.set("n", "<M-j>", "<C-w>j", {silent = true})
+vim.keymap.set("n", "<M-k>", "<C-w>k", {silent = true})
+
+-- Window management keybindings
+vim.keymap.set("n", "<leader>|", ":vsplit<CR>", {silent = true})                          -- Vertical split (like tmux)
+vim.keymap.set("n", "<leader>-", ":split<CR>", {silent = true})                           -- Horizontal split (like tmux)
+vim.keymap.set("n", "<leader>t", ":tabnew<CR>", {silent = true})                          -- New tab
+vim.keymap.set("n", "<leader>c", ":close<CR>", {silent = true})                           -- Close current split/tab
+vim.keymap.set("n", "<leader>=", "5<C-w>+", {silent = true})                              -- Increase split height
+vim.keymap.set("n", "<leader>_", "5<C-w>-", {silent = true})                              -- Decrease split height
+vim.keymap.set("n", "<leader>>", "5<C-w>>", {silent = true})                              -- Increase split width
+vim.keymap.set("n", "<leader><", "5<C-w><", {silent = true})                              -- Decrease split width
+vim.keymap.set("n", "<leader>n", ":tabnext<CR>", {silent = true})                         -- Next tab
+vim.keymap.set("n", "<leader>p", ":tabprevious<CR>", {silent = true})                     -- Previous tab
+
