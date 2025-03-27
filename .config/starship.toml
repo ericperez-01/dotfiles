@@ -1,59 +1,149 @@
-format = """\
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
 [](bg:#030B16 fg:#7DF9AA)\
-[󰀵 ](bg:#7DF9AA fg:#090c0c)\
-[](fg:#7DF9AA bg:#1C3A5E)\
-$time\
-[](fg:#1C3A5E bg:#3B76F0)\
+$os\
+$username\
+[](bg:#3B76F0 fg:#7DF9AA)\
 $directory\
 [](fg:#3B76F0 bg:#FCF392)\
 $git_branch\
 $git_status\
-$git_metrics\
 [](fg:#FCF392 bg:#33658A)\
-$cmd_duration\
-[](fg:#33658A)\
-$character\
-"""
+$c\
+$rust\
+$golang\
+$nodejs\
+$php\
+$java\
+$kotlin\
+$haskell\
+$python\
+[](fg:#33658A bg:#1C3A5E)\
+$docker_context\
+[](fg:#1C3A5E bg:#1C3A5E)\
+$time\
+[ ](fg:#1C3A5E)\
+$line_break$character"""
+
+[os]
+disabled = false
+style = "fg:#030B16 bg:#7DF9AA"
+format = '[ $symbol ]($style)'
+
+[os.symbols]
+Windows = "󰍲"
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+Arch = "󰣇"
+Artix = "󰣇"
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+
+[username]
+show_always = true
+style_user = "fg:#030B16 bg:#7DF9AA"
+style_root = "fg:#030B16 bg:#7DF9AA"
+format = '[ $user ]($style)'
 
 [directory]
-format = "[ 󰉋 $path ]($style)"
 style = "fg:#E4E4E4 bg:#3B76F0"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = "󰝚 "
+"Pictures" = " "
+"Developer" = "󰲋 "
 
 [git_branch]
-format = '[ $symbol$branch(:$remote_branch) ]($style)'
-symbol = "  "
-style = "fg:#1C3A5E bg:#FCF392"
+symbol = ""
+style = "bg:#FCF392 fg:#1C3A5E"
+format = '[[ $symbol $branch ](fg:#1C3A5E bg:#FCF392)]($style)'
 
 [git_status]
-format = '[$all_status]($style)'
-style = "fg:#1C3A5E bg:#FCF392"
+style = "bg:#FCF392 fg:#1C3A5E"
+format = '[[($all_status$ahead_behind )](fg:#1C3A5E bg:#FCF392)]($style)'
 
-[git_metrics]
-format = "([+$added]($added_style))[]($added_style)"
-added_style = "fg:#1C3A5E bg:#FCF392"
-deleted_style = "fg:bright-red bg:235"
-disabled = false
+[nodejs]
+symbol = ""
+style = "bg:#33658A fg:bright-white"
+format = '[[ $symbol( $version) ](fg:bright-white bg:#33658A)]($style)'
 
-[hg_branch]
-format = "[ $symbol$branch ]($style)"
-symbol = " "
+[c]
+symbol = " "
+style = "bg:#33658A fg:bright-white"
+format = '[[ $symbol( $version) ](fg:bright-white bg:#33658A)]($style)'
 
-[cmd_duration]
-format = "[ took $duration ]($style)"
-style = "fg:bright-white bg:#33658A"
-disabled = false
-show_milliseconds = false
-min_time = 4
+[rust]
+symbol = ""
+style = "bg:#33658A fg:bright-white"
+format = '[[ $symbol( $version) ](fg:bright-white bg:#33658A)]($style)'
 
-[character]
-success_symbol = '[ ➜](bold green) '
-error_symbol = '[ ✗](#E84D44) '
+[golang]
+symbol = ""
+style = "bg:#33658A fg:bright-white"
+format = '[[ $symbol( $version) ](fg:bright-white bg:#33658A)]($style)'
+
+[php]
+symbol = ""
+style = "bg:#33658A fg:bright-white"
+format = '[[ $symbol( $version) ](fg:bright-white bg:#33658A)]($style)'
+
+[java]
+symbol = " "
+style = "bg:#33658A fg:bright-white"
+format = '[[ $symbol( $version) ](fg:bright-white bg:#33658A)]($style)'
+
+[kotlin]
+symbol = ""
+style = "bg:#33658A fg:bright-white"
+format = '[[ $symbol( $version) ](fg:bright-white bg:#33658A)]($style)'
+
+[haskell]
+symbol = ""
+style = "bg:#33658A fg:bright-white"
+format = '[[ $symbol( $version) ](fg:bright-white bg:#33658A)]($style)'
+
+[python]
+symbol = ""
+style = "bg:#33658A fg:bright-white"
+format = '[[ $symbol( $version) ](fg:bright-white bg:#33658A)]($style)'
+
+[docker_context]
+symbol = ""
+style = "bg:#1C3A5E fg:#8DFBD2"
+format = '[[ $symbol( $context) ](fg:#8DFBD2 bg:#1C3A5E)]($style)'
 
 [time]
 disabled = false
-time_format = "%R" # Hour:Minute Format
-style = "bg:#1d2230"
-format = '[[ 󱑍 $time ](bg:#1C3A5E fg:#8DFBD2)]($style)'
+time_format = "%R"
+style = "bg:#1C3A5E fg:#8DFBD2"
+format = '[[  $time ](fg:#8DFBD2 bg:#1C3A5E)]($style)'
 
+[line_break]
+disabled = false
 
-
+[character]
+disabled = false
+success_symbol = '[➜](bold green)'
+error_symbol = '[✗](#E84D44)'
+vimcmd_symbol = '[](bold green)'
+vimcmd_replace_one_symbol = '[](#b16286)'  # Using a Gruvbox purple as a fallback
+vimcmd_replace_symbol = '[](#b16286)'
+vimcmd_visual_symbol = '[](#d79921)'      # Using a Gruvbox yellow as a fallback
