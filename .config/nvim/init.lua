@@ -80,10 +80,10 @@ vim.opt.ignorecase = true vim.opt.smartcase = true vim.opt.hlsearch = true
 vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", {silent = true})
 
 -- Smart window navigation with Alt/Option keys (like tmux)
-vim.keymap.set("n", "<M-h>", function() 
+vim.keymap.set("n", "<M-h>", function()
   if vim.fn.winnr() == vim.fn.winnr('h') then vim.cmd('tabprevious') else vim.cmd('wincmd h') end
 end, {silent = true})
-vim.keymap.set("n", "<M-l>", function() 
+vim.keymap.set("n", "<M-l>", function()
   if vim.fn.winnr() == vim.fn.winnr('l') then vim.cmd('tabnext') else vim.cmd('wincmd l') end
 end, {silent = true})
 vim.keymap.set("n", "<M-j>", "<C-w>j", {silent = true})
@@ -101,3 +101,6 @@ vim.keymap.set("n", "<leader><", "5<C-w><", {silent = true})                    
 vim.keymap.set("n", "<leader>n", ":tabnext<CR>", {silent = true})                         -- Next tab
 vim.keymap.set("n", "<leader>p", ":tabprevious<CR>", {silent = true})                     -- Previous tab
 
+-- Buffer navigation with Ctrl
+vim.keymap.set("n", "<C-h>", ":bprevious<CR>", { silent = true })  -- Previous buffer
+vim.keymap.set("n", "<C-l>", ":bnext<CR>", { silent = true })      -- Next buffer
