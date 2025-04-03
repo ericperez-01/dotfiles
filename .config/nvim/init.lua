@@ -1,7 +1,7 @@
 vim.opt.number = true vim.opt.relativenumber = true vim.opt.expandtab = true vim.opt.termguicolors = true
 vim.opt.mouse = "a" vim.opt.clipboard = "unnamedplus" vim.opt.tabstop = 2 vim.opt.shiftwidth = 2
-vim.cmd "cd $HOME"
 if vim.g.neovide then
+  vim.cmd "cd $HOME"
   vim.g.neovide_cursor_animation_length = 0.05 vim.g.neovide_scroll_animation_length = 0.1
   vim.g.neovide_refresh_rate = 60 vim.opt.guifont = "FiraCode Nerd Font:h13"
   vim.g.neovide_transparency = 0.95
@@ -16,8 +16,8 @@ if not vim.loop.fs_stat(lp) then
 end
 vim.opt.rtp:prepend(lp)
 require("lazy").setup({
-  {"nvim-tree/nvim-tree.lua", dependencies = {"nvim-tree/nvim-web-devicons"},
-    config = function() require("nvim-tree").setup() vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>") end},
+  {"nvim-neo-tree/neo-tree.nvim", dependencies = {"nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons", "MunifTanjim/nui.nvim"},
+    config = function() require("neo-tree").setup() vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", {silent = true}) end},
   {"nvim-telescope/telescope.nvim", dependencies = {"nvim-lua/plenary.nvim"},
     config = function() require("telescope").setup()
       vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files)

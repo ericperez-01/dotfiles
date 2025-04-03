@@ -1,0 +1,52 @@
+__pycache__
+
+# Large directories to ignore
+.Trash/
+Library/
+node_modules/
+.cache/
+Downloads/
+.cargo/
+Applications/
+.local/
+.npm/
+
+# Hidden directories that rarely contain project files
+.git/
+.DS_Store
+.Trash
+.vnc/
+.ssh/
+.zsh_sessions/
+
+# Package manager directories
+.npm/
+.yarn/
+.cargo/
+.rustup/
+.gem/
+
+# Application data
+.vscode/
+.config/
+.docker/
+.android/
+.sage/
+.jupyter/
+.ipython/
+.conda/
+.iterm2/
+
+# Binary and media files
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.mp4
+*.mov
+*.pdf
+*.zip
+*.tar
+*.gz
+*.dmg
+
