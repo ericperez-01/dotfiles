@@ -26,8 +26,15 @@ end
 vim.opt.rtp:prepend(lp)
 
 require("lazy").setup({
-  {"nvim-neo-tree/neo-tree.nvim", dependencies = {"nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons", "MunifTanjim/nui.nvim"},
-    config = function() require("neo-tree").setup() vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", {silent = true}) end},
+{"nvim-neo-tree/neo-tree.nvim", dependencies = {"nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons", "MunifTanjim/nui.nvim"},
+  config = function() require("neo-tree").setup({filesystem = {commands = {avante_add_files = function(state)
+    local node, path = state.tree:get_node(), state.tree:get_node():get_id()
+    local sidebar, open = require('avante').get(), require('avante').get():is_open()
+    if not open then require('avante.api').ask() sidebar = require('avante').get() end
+    sidebar.file_selector:add_selected_file(require('avante.utils').relative_path(path))
+    if not open then sidebar.file_selector:remove_selected_file('neo-tree filesystem [1]') end
+  end}, window = {mappings = {["oa"] = "avante_add_files"}}}})
+  vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", {silent = true}) end},
   {"nvim-telescope/telescope.nvim", dependencies = {"nvim-lua/plenary.nvim"},
     config = function() require("telescope").setup()
       vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files)
