@@ -138,3 +138,6 @@ vim.keymap.set("n", "<leader>p", ":tabprevious<CR>", {silent = true})           
 -- Buffer navigation with Ctrl
 vim.keymap.set("n", "<C-h>", ":bprevious<CR>", { silent = true })  -- Previous buffer
 vim.keymap.set("n", "<C-l>", ":bnext<CR>", { silent = true })      -- Next buffer
+
+-- Focus on Neotree
+vim.keymap.set("n", "<leader>E", ":Neotree reveal<CR>", {silent = true})
