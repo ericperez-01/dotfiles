@@ -1,13 +1,22 @@
-vim.opt.number = true vim.opt.relativenumber = true vim.opt.expandtab = true vim.opt.termguicolors = true
-vim.opt.mouse = "a" vim.opt.clipboard = "unnamedplus" vim.opt.tabstop = 2 vim.opt.shiftwidth = 2
+vim.opt.number = true
+vim.opt.expandtab = true
+vim.opt.termguicolors = true
+vim.opt.mouse = "a"
+vim.opt.clipboard = "unnamedplus"
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+
 if vim.g.neovide then
   vim.cmd "cd $HOME"
-  vim.g.neovide_cursor_animation_length = 0.05 vim.g.neovide_scroll_animation_length = 0.1
-  vim.g.neovide_refresh_rate = 60 vim.opt.guifont = "FiraCode Nerd Font:h13"
+  vim.g.neovide_cursor_animation_length = 0.05
+  vim.g.neovide_scroll_animation_length = 0.1
+  vim.g.neovide_refresh_rate = 60
+  vim.opt.guifont = "FiraCode Nerd Font:h13"
   vim.g.neovide_transparency = 0.95
   vim.keymap.set("t", "<D-v>", [[<C-\><C-n>"+pi]], { noremap = true })
   vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
 end
+
 vim.g.mapleader = " "
 local lp = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lp) then
@@ -15,6 +24,7 @@ if not vim.loop.fs_stat(lp) then
     "--branch=stable", lp})
 end
 vim.opt.rtp:prepend(lp)
+
 require("lazy").setup({
   {"nvim-neo-tree/neo-tree.nvim", dependencies = {"nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons", "MunifTanjim/nui.nvim"},
     config = function() require("neo-tree").setup() vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", {silent = true}) end},
@@ -73,10 +83,27 @@ require("lazy").setup({
         sources = cmp.config.sources({{name = "nvim_lsp"}, {name = "luasnip"},
           {name = "buffer"}, {name = "path"}})}
     end},
+  -- Added flash.nvim plugin
+  {"folke/flash.nvim",
+    event = "VeryLazy",
+    opts = {},
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+      { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+    },
+  },
 })
-vim.keymap.set("n", "<leader>w", ":w<CR>") vim.keymap.set("n", "<leader>q", ":q<CR>")
-vim.opt.showmode = false vim.opt.laststatus = 3
-vim.opt.ignorecase = true vim.opt.smartcase = true vim.opt.hlsearch = true
+
+vim.keymap.set("n", "<leader>w", ":w<CR>")
+vim.keymap.set("n", "<leader>q", ":q<CR>")
+vim.opt.showmode = false
+vim.opt.laststatus = 3
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.hlsearch = true
 vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", {silent = true})
 
 -- Smart window navigation with Alt/Option keys (like tmux)
