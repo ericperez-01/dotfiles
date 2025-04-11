@@ -12,7 +12,7 @@ vim.opt.rtp:prepend(lp)
 -- Check if running inside VSCode
 if vim.g.vscode then
   -- VSCode-specific configuration
-  require('vscode')
+  require('vscode_config')
 else
   -- Regular Neovim configuration
   require('regular')
