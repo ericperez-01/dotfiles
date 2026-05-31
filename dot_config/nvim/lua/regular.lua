@@ -101,7 +101,12 @@ require("lazy").setup({
         callback = function() pcall(vim.treesitter.start) end,
       })
     end},
-  {"yetone/avante.nvim", event = "VeryLazy", build = "make",
+  {"yetone/avante.nvim", event = "VeryLazy",
+    -- Build the native libs from source (the prebuilt download 404s for this
+    -- release). `-k` keeps going so all four libs compile even though avante's
+    -- Makefile `cp` step assumes .so; on macOS cargo emits .dylib, so copy
+    -- those into place with the names avante require()s.
+    build = [[make -k BUILD_FROM_SOURCE=true; for f in target/release/libavante_*.dylib; do [ -f "$f" ] && cp "$f" "lua/$(basename "$f" .dylib | sed 's/^lib//').so"; done; true]],
     dependencies = {"nvim-treesitter/nvim-treesitter", "stevearc/dressing.nvim",
       "nvim-lua/plenary.nvim", "MunifTanjim/nui.nvim"},
     config = function()
