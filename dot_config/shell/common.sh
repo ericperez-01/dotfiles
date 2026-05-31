@@ -10,11 +10,9 @@ alias mi='mamba install -y'
 # rsync copy (machine-specific `move` lives in each shell rc)
 alias copy='rsync -avzh --progress'
 
-# Modern `ls` via eza; fall back to exa where eza is not installed yet.
+# Modern `ls` via eza.
 if command -v eza >/dev/null 2>&1; then
   alias ls='eza --icons -F -H --group-directories-first --git -1'
-elif command -v exa >/dev/null 2>&1; then
-  alias ls='exa --icons -F -H --group-directories-first --git -1'
 fi
 alias ll='ls -alF'
 alias la='ls -A'
