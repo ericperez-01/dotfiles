@@ -90,10 +90,17 @@ require("lazy").setup({
     config = function() require("telescope").setup()
       vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files)
       vim.keymap.set("n", "<leader>fg", require("telescope.builtin").live_grep) end},
-  {"nvim-treesitter/nvim-treesitter", build = ":TSUpdate",
-    config = function() require("nvim-treesitter.configs").setup {
-      ensure_installed = {"lua", "javascript", "python", "html", "css", "rust"},
-      highlight = {enable = true}, indent = {enable = true}} end},
+  {"nvim-treesitter/nvim-treesitter", branch = "main", lazy = false, build = ":TSUpdate",
+    config = function()
+      local langs = {"lua", "javascript", "python", "html", "css", "rust", "markdown", "markdown_inline"}
+      require("nvim-treesitter").install(langs)
+      -- On the `main` branch highlighting is started per-buffer (not a global
+      -- `highlight = { enable = true }` like the old master branch).
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = {"lua", "javascript", "python", "html", "css", "rust", "markdown"},
+        callback = function() pcall(vim.treesitter.start) end,
+      })
+    end},
   {"yetone/avante.nvim", event = "VeryLazy", build = "make",
     dependencies = {"nvim-treesitter/nvim-treesitter", "stevearc/dressing.nvim",
       "nvim-lua/plenary.nvim", "MunifTanjim/nui.nvim"},
@@ -130,6 +137,18 @@ require("lazy").setup({
   {"windwp/nvim-autopairs", event = "InsertEnter", config = true},
   {"numToStr/Comment.nvim", config = true},
   {"lewis6991/gitsigns.nvim", config = true},
+  {"MeanderingProgrammer/render-markdown.nvim",
+    dependencies = {"nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons"},
+    ft = {"markdown", "Avante"},
+    opts = {
+      -- Render markdown in normal markdown files and in avante's chat buffer.
+      file_types = {"markdown", "Avante"},
+    },
+    config = function(_, opts)
+      require("render-markdown").setup(opts)
+      vim.keymap.set("n", "<leader>m", "<cmd>RenderMarkdown toggle<CR>",
+        {desc = "Toggle Markdown render", silent = true})
+    end},
   {"williamboman/mason.nvim", 
     config = function() 
       require("mason").setup() 
