@@ -48,7 +48,7 @@ vim.g.rustaceanvim = {
   server = {
     on_attach = function(client, bufnr)
       -- Enable completion triggered by <c-x><c-o>
-      vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+      vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
       
       -- Buffer local mappings
       local opts = { noremap=true, silent=true, buffer=bufnr }
@@ -97,9 +97,30 @@ require("lazy").setup({
   {"yetone/avante.nvim", event = "VeryLazy", build = "make",
     dependencies = {"nvim-treesitter/nvim-treesitter", "stevearc/dressing.nvim",
       "nvim-lua/plenary.nvim", "MunifTanjim/nui.nvim"},
-    config = function() require("avante").setup {provider = "claude",
-      model = "claude-3-7-sonnet-20240229", api_key_name = "ANTHROPIC_API_KEY"}
-      vim.keymap.set("n", "<leader>a", ":AvanteAsk<CR>") end},
+    config = function()
+      require("avante").setup {
+        provider = "vllm",
+        providers = {
+          vllm = {
+            __inherited_from = "openai",
+            -- Local Qwen served by vLLM. Endpoint comes from $VLLM_ENDPOINT
+            -- (localhost on the workstation, the workstation host on the Mac
+            -- over Tailscale); falls back to the workstation when launched
+            -- without shell env (e.g. Neovide).
+            endpoint = vim.env.VLLM_ENDPOINT or "http://workstation:8000/v1",
+            model = "qwen3.6-coder",
+            api_key_name = "", -- vLLM needs no auth; empty disables the key prompt
+            timeout = 30000,
+            disable_tools = false,
+            extra_request_body = {
+              temperature = 0.2,
+              max_tokens = 8192,
+            },
+          },
+        },
+      }
+      vim.keymap.set("n", "<leader>a", ":AvanteAsk<CR>")
+    end},
   {"mg979/vim-visual-multi", branch = "master"},
   {"folke/tokyonight.nvim", config = function() vim.cmd "colorscheme tokyonight" end},
   {"github/copilot.vim",
@@ -136,10 +157,12 @@ require("lazy").setup({
     dependencies = {"hrsh7th/nvim-cmp", "hrsh7th/cmp-nvim-lsp", "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path", "L3MON4D3/LuaSnip", "saadparwaiz1/cmp_luasnip"},
     config = function()
+      -- nvim 0.11+ native LSP config (replaces the deprecated
+      -- require("lspconfig").<server>.setup framework).
       local caps = require("cmp_nvim_lsp").default_capabilities()
-      for _, lsp in ipairs({"lua_ls", "pyright", "ts_ls"}) do
-        require("lspconfig")[lsp].setup {capabilities = caps} end
-      
+      vim.lsp.config("*", { capabilities = caps })
+      vim.lsp.enable({ "lua_ls", "pyright", "ts_ls" })
+
       local cmp = require("cmp") local ls = require("luasnip")
       cmp.setup {snippet = {expand = function(args) ls.lsp_expand(args.body) end},
         mapping = cmp.mapping.preset.insert {
@@ -158,7 +181,25 @@ require("lazy").setup({
     end},
   {"folke/flash.nvim",
     event = "VeryLazy",
-    opts = {},
+    ---@type Flash.Config
+    opts = {
+      modes = {
+        -- Enhanced f/F/t/T: show jump labels so you can hop to any
+        -- match on the line, not just the next one.
+        char = {
+          jump_labels = true,
+        },
+        -- Show Flash labels inside regular / and ? search too.
+        -- Toggle at runtime with <c-s>; flip `enabled` to make it default.
+        search = {
+          enabled = false,
+        },
+      },
+      label = {
+        -- Color labels by distance from the cursor for faster targeting.
+        rainbow = { enabled = true, shade = 5 },
+      },
+    },
     keys = {
       { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
       { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },

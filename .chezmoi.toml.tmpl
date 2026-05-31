@@ -1,0 +1,10 @@
+{{- /* On the Mac the source of truth is the working repo; elsewhere use the chezmoi default. */ -}}
+{{- if ne .chezmoi.hostname "workstation" }}
+sourceDir = {{ joinPath .chezmoi.homeDir "dev/setup/dotfiles" | quote }}
+{{- end }}
+
+encryption = "age"
+
+[age]
+    identity = {{ joinPath .chezmoi.homeDir ".config/chezmoi/key.txt" | quote }}
+    recipients = ["age1hm7tutu6x27qmf55x0ztlmhc8luj6lrtjanza53hlzv3shnge33su3h0x7", "age18w77nfc4z7d078asv7e3ccu3ppxz7utpdsg05yklkzveuy3v49hsrj56nm"]

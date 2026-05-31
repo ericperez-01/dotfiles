@@ -1,0 +1,9 @@
+# age private keys / identities must NEVER be committed
+key.txt
+*key.txt
+*.age.key
+
+# decrypted secrets — only the encrypted_* version belongs in the repo
+.secrets
+dot_secrets
+secrets.decrypted

@@ -1,0 +1,50 @@
+# ~/.zshrc — managed by chezmoi (macOS).
+
+export PATH="$HOME/.config/emacs/bin:$PATH:$HOME/bin"
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# >>> mamba initialize >>>
+# !! Contents within this block are managed by 'mamba init' !!
+export MAMBA_EXE='/Users/eric/.local/bin/micromamba';
+export MAMBA_ROOT_PREFIX='/Users/eric/micromamba';
+__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__mamba_setup"
+else
+    alias micromamba="$MAMBA_EXE"  # Fallback on help from mamba activate
+fi
+unset __mamba_setup
+# <<< mamba initialize <<<
+
+# Shared aliases (bash + zsh)
+[ -f "$HOME/.config/shell/common.sh" ] && source "$HOME/.config/shell/common.sh"
+
+# macOS-only aliases
+alias ytdl="yt-dlp -x --audio-format mp3"
+alias move="rsync -avzh --remove-source-files --progress"
+alias move_local='function _mv(){ rsync -avzh --remove-source-files --progress "$1" "$2" && find "$1" -type d -empty -delete; }; _mv'
+alias dx="$HOME/.cargo/bin/dx"
+
+# Local Qwen (vLLM on the workstation, reachable over Tailscale) for nvim/avante
+export VLLM_ENDPOINT="http://workstation:8000/v1"
+
+# Secrets (age-decrypted by chezmoi; never committed in plaintext)
+[ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
+
+if [ -n "$TMUX" ]; then
+   micromamba activate shell
+fi
+
+eval "$(starship init zsh)"
+[ -f "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && source "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
+# Added by Antigravity
+export PATH="/Users/eric/.antigravity/antigravity/bin:$PATH"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/eric/.lmstudio/bin"
+# End of LM Studio CLI section
+
+export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
