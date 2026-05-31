@@ -17,32 +17,30 @@ set t_Co=256
 
 set foldcolumn=3
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" Vundle plugins — load only if Vundle is installed, so plain vim never
+" errors on a machine without it. To enable the plugins:
+"   git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim
+"   vim +PluginInstall +qall
+if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
+  set rtp+=~/.vim/bundle/Vundle.vim
+  call vundle#begin()
 
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'tmhedberg/SimpylFold'
-let g:SimpylFold_docstring_preview=1
+  Plugin 'VundleVim/Vundle.vim'
+  Plugin 'tmhedberg/SimpylFold'
+  let g:SimpylFold_docstring_preview=1
 
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-dispatch'
-Plugin 'tpope/vim-eunuch'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-fugitive'
-Plugin 'jph00/swift-apple'
+  Plugin 'tpope/vim-repeat'
+  Plugin 'tpope/vim-dispatch'
+  Plugin 'tpope/vim-eunuch'
+  Plugin 'tpope/vim-surround'
+  Plugin 'tpope/vim-fugitive'
+  Plugin 'jph00/swift-apple'
 
-"Plugin 'janko-m/vim-test'
-"nmap <silent> <leader>t :TestNearest<CR>
-"nmap <silent> <leader>T :TestFile<CR>
-"nmap <silent> <leader>a :TestSuite<CR>
-"nmap <silent> <leader>l :TestLast<CR>
-"nmap <silent> <leader>g :TestVisit<CR>
+  Plugin 'jeetsukumaran/vim-indentwise'
+  Plugin 'vim-scripts/indentpython.vim'
 
-Plugin 'jeetsukumaran/vim-indentwise'
-Plugin 'vim-scripts/indentpython.vim'
-"Plugin 'Konfekt/FastFold'
-
-call vundle#end()            " required
+  call vundle#end()            " required
+endif
 filetype plugin indent on
 
 let python_highlight_all=1
