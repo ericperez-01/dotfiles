@@ -1,0 +1,18 @@
+. "$HOME/.cargo/env"
+
+# Secrets for EVERY zsh, not just interactive ones.
+#
+# `.zshrc` also sources this, but `.zshrc` is read only by interactive shells —
+# so anything driving zsh non-interactively (Claude Code's Bash tool, `zsh -c`,
+# `ssh host '<cmd>'`, a script with a zsh shebang) came up without GH_TOKEN and
+# `gh` reported itself logged out. That looks exactly like a token that was
+# never set up, which is the wrong conclusion and has cost time twice.
+#
+# `.zshenv` is the one file zsh reads on every invocation, so it is the only
+# place that fixes the non-interactive case. Same shape as the workstation fix
+# that moved the `.secrets` source above `.bashrc`'s interactive guard.
+#
+# Keep everything above and inside this guard SILENT: stray output on a
+# non-interactive shell breaks scp/rsync/sftp. `~/.secrets` is only `export`
+# lines and a `case`, so it qualifies — check again before adding anything to it.
+[ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
