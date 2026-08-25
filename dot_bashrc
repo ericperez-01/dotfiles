@@ -2,6 +2,12 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# Secrets (age-decrypted by chezmoi; never committed in plaintext).
+# Deliberately ABOVE the interactive guard: bash also reads this file for the
+# non-interactive shell sshd spawns, and `ssh workstation '<cmd>'` needs GH_TOKEN
+# just as much as a login session does. Keep it above, and keep it side-effect free.
+[ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -122,5 +128,5 @@ export HF_HOME=/sfz/projects/ai/models/
 # PATH: npm globals + local bin (chezmoi/age/nvim live here)
 export PATH=~/.npm-global/bin:$HOME/.local/bin:$PATH
 
-# Secrets (age-decrypted by chezmoi; never committed in plaintext)
-[ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
+# Appended by the pixi installer; folded into chezmoi so apply stops eating it.
+export PATH="$HOME/.pixi/bin:$PATH"
