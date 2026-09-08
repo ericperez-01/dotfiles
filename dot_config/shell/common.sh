@@ -25,7 +25,9 @@ alias cc='claude --dangerously-skip-permissions'
 # interactive session (the web UI), arguments run one headless task and print the answer.
 # The model — Qwen 3.8 on the workstation's vLLM, or GLM 5.3 Flash via OpenRouter — is picked
 # in the UI's model menu and saved to ~/.dsh/settings.yaml, which headless turns follow too.
-ds() {
+# Named dsx, not ds or dsh: `dsh` is also a Debian package (dancer's/distributed shell) and
+# `dh` is debhelper's, so a two-letter name would collide the day this runs on Linux.
+dsx() {
   if [ $# -eq 0 ]; then
     dsh --profile web --port 3080
   else
