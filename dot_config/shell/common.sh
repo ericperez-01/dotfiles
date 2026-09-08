@@ -22,15 +22,13 @@ alias l='ls -CF'
 alias cc='claude --dangerously-skip-permissions'
 
 # DeepSeek Harness (dsh), the Claude Code budget fallback. Like cc: no arguments opens the
-# interactive session (the web UI, on its own port per model); arguments run one headless
-# task and print the answer. The --patch picks the model the session starts on.
-_dsh_on() {
-  local patch="$HOME/.dsh/patches/$1.yml" port="$2"; shift 2
+# interactive session (the web UI), arguments run one headless task and print the answer.
+# The model — Qwen 3.8 on the workstation's vLLM, or GLM 5.3 Flash via OpenRouter — is picked
+# in the UI's model menu and saved to ~/.dsh/settings.yaml, which headless turns follow too.
+ds() {
   if [ $# -eq 0 ]; then
-    dsh --profile web --patch "$patch" --port "$port"
+    dsh --profile web --port 3080
   else
-    dsh --profile headless --patch "$patch" "$@"
+    dsh --profile headless "$@"
   fi
 }
-dsv() { _dsh_on vllm 3080 "$@"; }   # Qwen 3.8 on the workstation's vLLM (wakes it)
-dsg() { _dsh_on glm 3081 "$@"; }    # GLM 5.3 Flash via OpenRouter
